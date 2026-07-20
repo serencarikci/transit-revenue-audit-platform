@@ -228,3 +228,159 @@ INSERT INTO terminal_depot_assignment (terminal_id, depot_id, valid_from, valid_
 SELECT t.id, d.id, DATE '2026-01-01', NULL
 FROM terminal t, depot d
 WHERE t.terminal_number = '5100' AND d.code = 'NEL';
+
+INSERT INTO card_transaction (
+    transaction_reference, approval_number, card_alias, terminal_id, transaction_type, product_type,
+    amount, transaction_time, source_system
+)
+SELECT 'REF-2026-0701-001', 'APR-7001', 'SlF412349012', t.id, 'SALE', 'TICKET', 25.00,
+       TIMESTAMPTZ '2026-07-01 08:15:00+00', 'CSV_IMPORT'
+FROM terminal t WHERE t.terminal_number = '3122';
+
+INSERT INTO card_transaction (
+    transaction_reference, approval_number, card_alias, terminal_id, transaction_type, product_type,
+    amount, transaction_time, source_system
+)
+SELECT 'REF-2026-0701-002', 'APR-7002', 'SlF498765432', t.id, 'SALE', 'TICKET', 40.00,
+       TIMESTAMPTZ '2026-07-01 09:40:00+00', 'CSV_IMPORT'
+FROM terminal t WHERE t.terminal_number = '3122';
+
+INSERT INTO card_transaction (
+    transaction_reference, approval_number, card_alias, terminal_id, transaction_type, product_type,
+    amount, transaction_time, source_system
+)
+SELECT 'REF-2026-0701-003', 'APR-7003', 'SlF412349012', t.id, 'CANCELLATION', 'TICKET', 25.00,
+       TIMESTAMPTZ '2026-07-01 09:45:00+00', 'CSV_IMPORT'
+FROM terminal t WHERE t.terminal_number = '3122';
+
+INSERT INTO card_transaction (
+    transaction_reference, approval_number, card_alias, terminal_id, transaction_type, product_type,
+    amount, transaction_time, source_system
+)
+SELECT 'REF-2026-0701-004', 'APR-7004', 'SlF455501122', t.id, 'LOAD', 'WALLET', 100.00,
+       TIMESTAMPTZ '2026-07-01 11:05:00+00', 'CSV_IMPORT'
+FROM terminal t WHERE t.terminal_number = '4001';
+
+INSERT INTO card_transaction (
+    transaction_reference, approval_number, card_alias, terminal_id, transaction_type, product_type,
+    amount, transaction_time, source_system
+)
+SELECT 'REF-EPOCH-001', 'APR-EPOCH-1', 'SlF400000001', t.id, 'SALE', 'TICKET', 15.00,
+       TIMESTAMPTZ '1970-01-01 12:00:00+00', 'CSV_IMPORT'
+FROM terminal t WHERE t.terminal_number = '5100';
+
+INSERT INTO card_transaction (
+    transaction_reference, approval_number, card_alias, terminal_id, transaction_type, product_type,
+    amount, transaction_time, source_system
+)
+SELECT 'REF-2026-0702-001', 'APR-7101', 'SlF433344455', t.id, 'SALE', 'TICKET', 18.50,
+       TIMESTAMPTZ '2026-07-02 07:20:00+00', 'CSV_IMPORT'
+FROM terminal t WHERE t.terminal_number = '3122';
+
+INSERT INTO financial_period (
+    depot_id, period_date, opening_balance, deposited_amount, withdrawal_amount, actual_closing_balance, status
+)
+SELECT d.id, DATE '2026-07-01', 1000.00, 250.00, 50.00, 1190.00, 'OPEN'
+FROM depot d WHERE d.code = 'WHR';
+
+INSERT INTO financial_period (
+    depot_id, period_date, opening_balance, deposited_amount, withdrawal_amount, actual_closing_balance, status
+)
+SELECT d.id, DATE '2026-06-01', 800.00, 120.00, 20.00, 900.00, 'RECONCILED'
+FROM depot d WHERE d.code = 'NEL';
+
+INSERT INTO financial_period (
+    depot_id, period_date, opening_balance, deposited_amount, withdrawal_amount, actual_closing_balance, status
+)
+SELECT d.id, DATE '2026-07-01', 500.00, 80.00, 10.00, 540.00, 'OPEN'
+FROM depot d WHERE d.code = 'JHB';
+
+INSERT INTO reconciliation_result (
+    financial_period_id, expected_closing_balance, actual_closing_balance, variance,
+    sale_amount, cancellation_amount, net_amount, status
+)
+SELECT fp.id, 1200.00, 1190.00, -10.00, 65.00, 25.00, 40.00, 'LARGE_VARIANCE'
+FROM financial_period fp
+JOIN depot d ON d.id = fp.depot_id
+WHERE d.code = 'WHR' AND fp.period_date = DATE '2026-07-01';
+
+INSERT INTO reconciliation_result (
+    financial_period_id, expected_closing_balance, actual_closing_balance, variance,
+    sale_amount, cancellation_amount, net_amount, status
+)
+SELECT fp.id, 900.00, 900.00, 0.00, 55.00, 0.00, 55.00, 'MATCHED'
+FROM financial_period fp
+JOIN depot d ON d.id = fp.depot_id
+WHERE d.code = 'NEL' AND fp.period_date = DATE '2026-06-01';
+
+INSERT INTO reconciliation_result (
+    financial_period_id, expected_closing_balance, actual_closing_balance, variance,
+    sale_amount, cancellation_amount, net_amount, status
+)
+SELECT fp.id, 570.00, 540.00, -30.00, 100.00, 0.00, 100.00, 'LARGE_VARIANCE'
+FROM financial_period fp
+JOIN depot d ON d.id = fp.depot_id
+WHERE d.code = 'JHB' AND fp.period_date = DATE '2026-07-01';
+
+INSERT INTO financial_period (
+    depot_id, period_date, opening_balance, deposited_amount, withdrawal_amount, actual_closing_balance, status
+)
+SELECT d.id, DATE '2026-05-01', 400.00, 50.00, 10.00, 439.50, 'RECONCILED'
+FROM depot d WHERE d.code = 'WHR';
+
+INSERT INTO reconciliation_result (
+    financial_period_id, expected_closing_balance, actual_closing_balance, variance,
+    sale_amount, cancellation_amount, net_amount, status, resolution_note, resolved_by, resolved_at
+)
+SELECT fp.id, 440.00, 439.50, -0.50, 40.00, 0.00, 40.00, 'RESOLVED',
+       'Rounding difference accepted', 'finance', TIMESTAMPTZ '2026-07-03 10:00:00+00'
+FROM financial_period fp
+JOIN depot d ON d.id = fp.depot_id
+WHERE d.code = 'WHR' AND fp.period_date = DATE '2026-05-01';
+
+INSERT INTO anomaly (rule_code, severity, status, entity_type, entity_id, title, details, detected_at)
+SELECT 'RULE_7_SYNC_DELAY', 'HIGH', 'OPEN', 'Terminal', t.id::text,
+       'Terminal sync delayed more than 24 hours',
+       'lastSyncTime is older than the configured sync delay threshold',
+       TIMESTAMPTZ '2026-07-03 01:10:00+00'
+FROM terminal t WHERE t.terminal_number = '4001';
+
+INSERT INTO anomaly (rule_code, severity, status, entity_type, entity_id, title, details, detected_at)
+SELECT 'RULE_8_MISSED_SHUTDOWN', 'MEDIUM', 'OPEN', 'Terminal', t.id::text,
+       'Planned 01:00 shutdown window missed',
+       'No healthy shutdown sync observed for the planned PDA window',
+       TIMESTAMPTZ '2026-07-03 01:15:00+00'
+FROM terminal t WHERE t.terminal_number = '5100';
+
+INSERT INTO anomaly (rule_code, severity, status, entity_type, entity_id, title, details, detected_at)
+SELECT 'RULE_3_EPOCH_DATE', 'HIGH', 'UNDER_REVIEW', 'CardTransaction', ct.id::text,
+       'Transaction dated 1970-01-01',
+       'Epoch-dated transaction detected during import validation',
+       TIMESTAMPTZ '2026-07-02 16:00:00+00'
+FROM card_transaction ct WHERE ct.transaction_reference = 'REF-EPOCH-001';
+
+INSERT INTO anomaly (rule_code, severity, status, entity_type, entity_id, title, details, detected_at, reviewed_by)
+SELECT 'RULE_9_CANCEL_SALE', 'HIGH', 'OPEN', 'CardTransaction', ct.id::text,
+       'Cancellation without matching sale proximity',
+       'Cancellation could not be matched to a sale on the same terminal/card/amount window',
+       TIMESTAMPTZ '2026-07-01 10:00:00+00', NULL
+FROM card_transaction ct WHERE ct.transaction_reference = 'REF-2026-0701-003';
+
+INSERT INTO report_snapshot (
+    report_type, parameters_json, status, result_hash, output_path, requested_by, started_at, completed_at
+) VALUES
+('VARIANCE_SUMMARY', '{"year":2026,"month":7}', 'COMPLETED', 'a3f1c9e8b2d0476a',
+ '/tmp/reports/variance-2026-07.csv', 'finance', TIMESTAMPTZ '2026-07-03 09:00:00+00', TIMESTAMPTZ '2026-07-03 09:00:08+00'),
+('ANOMALY_EXPORT', '{"severity":"HIGH"}', 'COMPLETED', 'b7e2d4a1c8f05390',
+ '/tmp/reports/anomaly-high.csv', 'auditor', TIMESTAMPTZ '2026-07-03 09:30:00+00', TIMESTAMPTZ '2026-07-03 09:30:05+00');
+
+INSERT INTO audit_log (action, entity_type, entity_id, actor_username, details_json, created_at) VALUES
+('USER_LOGIN', 'User', 'admin', 'admin', '{}', TIMESTAMPTZ '2026-07-03 08:00:00+00'),
+('RECONCILIATION_CALCULATE', 'ReconciliationResult', '1', 'finance',
+ '{"status":"LARGE_VARIANCE","variance":"-10.00"}', TIMESTAMPTZ '2026-07-03 08:10:00+00'),
+('RECONCILIATION_CALCULATE', 'ReconciliationResult', '2', 'finance',
+ '{"status":"MATCHED","variance":"0.00"}', TIMESTAMPTZ '2026-07-03 08:12:00+00'),
+('ANOMALY_RESOLVE', 'Anomaly', '3', 'auditor', '{"note":"Under review after CSV re-import"}',
+ TIMESTAMPTZ '2026-07-03 08:20:00+00'),
+('REPORT_REQUEST', 'ReportSnapshot', '1', 'finance', '{"reportType":"VARIANCE_SUMMARY"}',
+ TIMESTAMPTZ '2026-07-03 09:00:00+00');

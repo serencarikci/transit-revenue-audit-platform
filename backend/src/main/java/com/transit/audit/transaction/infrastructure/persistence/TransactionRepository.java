@@ -4,31 +4,20 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.transit.audit.transaction.domain.model.CardTransaction;
-import com.transit.audit.transaction.domain.model.TransactionType;
 
-public interface TransactionRepository extends JpaRepository<CardTransaction, Long> {
+public interface TransactionRepository
+		extends JpaRepository<CardTransaction, Long>, JpaSpecificationExecutor<CardTransaction> {
 
 	boolean existsByApprovalNumberAndCardAliasAndTerminalIdAndAmount(String approvalNumber, String cardAlias,
 			Long terminalId, BigDecimal amount);
 
 	boolean existsByTransactionReference(String transactionReference);
-
-	@Query("""
-			select t from CardTransaction t
-			where (:terminalId is null or t.terminalId = :terminalId)
-			  and (:type is null or t.transactionType = :type)
-			  and (:fromTime is null or t.transactionTime >= :fromTime)
-			  and (:toTime is null or t.transactionTime <= :toTime)
-			""")
-	Page<CardTransaction> search(@Param("terminalId") Long terminalId, @Param("type") TransactionType type,
-			@Param("fromTime") Instant fromTime, @Param("toTime") Instant toTime, Pageable pageable);
 
 	@Query("""
 			select t from CardTransaction t

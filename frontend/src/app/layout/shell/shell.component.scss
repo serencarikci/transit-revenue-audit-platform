@@ -1,29 +1,63 @@
 .shell {
   height: 100vh;
+  background: transparent;
 }
 
 .nav {
-  width: 240px;
-  background: #263238;
-  color: #eee;
+  width: 260px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--line);
+  color: var(--ink);
 }
 
 .brand {
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 1rem;
+  padding: 1.25rem 1.1rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand-mark {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+.brand-title {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
 }
 
 .nav a {
-  color: #eee;
+  color: var(--ink) !important;
+  margin: 0.15rem 0.55rem;
+  border-radius: 10px;
 }
 
 .nav a.active {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(90deg, var(--accent-soft), var(--lavender-soft)) !important;
+  color: var(--accent-hover) !important;
+}
+
+.nav mat-icon {
+  color: var(--ink-muted);
+}
+
+.nav a.active mat-icon {
+  color: var(--accent);
 }
 
 .top {
-  background: #37474f !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  color: var(--ink) !important;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
 }
 
 .spacer {
@@ -33,10 +67,12 @@
 .user {
   margin-right: 0.75rem;
   font-size: 0.875rem;
+  color: var(--ink-muted);
+  font-weight: 500;
 }
 
 .content {
-  padding: 1rem 1.25rem 1.5rem;
-  background: #fafafa;
+  padding: 1.25rem 1.5rem 2rem;
+  background: transparent;
   min-height: calc(100vh - 64px);
 }

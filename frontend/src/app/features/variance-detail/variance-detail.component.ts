@@ -74,7 +74,7 @@ export class VarianceDetailComponent implements OnInit, AfterViewInit {
               Number(r.netAmount),
               Number(r.variance),
             ],
-            backgroundColor: ['#134e6f', '#2a9d8f', '#457b9d', '#e09f3e', '#335c67', '#c44536'],
+            backgroundColor: ['#3b6fd4', '#6b8fdc', '#b8a6e8', '#94a3b8', '#64748b', '#c2410c'],
           },
         ],
       },

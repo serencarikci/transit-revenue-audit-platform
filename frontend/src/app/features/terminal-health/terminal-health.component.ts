@@ -50,7 +50,7 @@ export class TerminalHealthComponent implements OnInit, AfterViewInit {
       type: 'doughnut',
       data: {
         labels: ['Healthy', 'Stale sync', 'Inactive'],
-        datasets: [{ data: [this.ok, this.stale, this.inactive], backgroundColor: ['#2a9d8f', '#e09f3e', '#6c757d'] }],
+        datasets: [{ data: [this.ok, this.stale, this.inactive], backgroundColor: ['#3b6fd4', '#b8a6e8', '#94a3b8'] }],
       },
     });
   }

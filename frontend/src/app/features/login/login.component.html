@@ -1,6 +1,10 @@
 <div class="login-page">
   <mat-card class="panel">
-    <h1>Login</h1>
+    <div class="brand">
+      <span class="brand-mark">Transit Revenue</span>
+      <h1>Audit Platform</h1>
+      <p class="lead">Sign in to reconcile terminal revenue and review audit findings.</p>
+    </div>
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field appearance="outline" class="full">
         <mat-label>Username</mat-label>
@@ -14,7 +18,7 @@
         <p class="err">{{ error() }}</p>
       }
       <button mat-flat-button color="primary" type="submit" [disabled]="loading()">
-        {{ loading() ? 'Please wait...' : 'Login' }}
+        {{ loading() ? 'Please wait...' : 'Sign in' }}
       </button>
     </form>
   </mat-card>

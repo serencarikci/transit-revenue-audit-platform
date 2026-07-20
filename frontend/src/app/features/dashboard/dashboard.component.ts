@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         type: 'bar',
         data: {
           labels: this.varianceData.map((_, i) => `V${i + 1}`),
-          datasets: [{ label: 'Variance', data: this.varianceData, backgroundColor: '#2a9d8f' }],
+          datasets: [{ label: 'Variance', data: this.varianceData, backgroundColor: '#3b6fd4' }],
         },
         options: { responsive: true, plugins: { legend: { display: false } } },
       });
@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           datasets: [
             {
               data: [this.severityCounts.HIGH, this.severityCounts.MEDIUM, this.severityCounts.LOW],
-              backgroundColor: ['#c44536', '#e09f3e', '#335c67'],
+              backgroundColor: ['#3b6fd4', '#b8a6e8', '#94a3b8'],
             },
           ],
         },

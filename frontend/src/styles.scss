@@ -1,3 +1,23 @@
+:root {
+  --ink: #1e2a44;
+  --ink-muted: #667698;
+  --accent: #3b6fd4;
+  --accent-hover: #2f5bb8;
+  --accent-soft: #e8eefc;
+  --lavender: #b8a6e8;
+  --lavender-soft: #efe9fb;
+  --canvas-top: #f4f6fd;
+  --canvas-bottom: #faf9ff;
+  --surface: #ffffff;
+  --line: #dde3f2;
+  --danger: #b42318;
+  --warn: #b54708;
+  --ok: #3b6fd4;
+  --shadow: 0 10px 30px rgba(59, 111, 212, 0.08);
+  --radius: 14px;
+  --font: 'Plus Jakarta Sans', sans-serif;
+}
+
 html,
 body {
   height: 100%;
@@ -5,7 +25,86 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
-  color: #212121;
-  background: #fafafa;
+  font-family: var(--font);
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 480px at 8% -8%, rgba(184, 166, 232, 0.35) 0%, transparent 55%),
+    radial-gradient(900px 420px at 100% 0%, rgba(59, 111, 212, 0.16) 0%, transparent 50%),
+    linear-gradient(180deg, var(--canvas-top), var(--canvas-bottom));
+  background-attachment: fixed;
+}
+
+html,
+body,
+.mat-typography,
+button,
+input,
+textarea,
+select,
+.mat-mdc-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-form-field,
+.mat-mdc-list-item,
+.mat-mdc-card,
+.mat-mdc-table,
+.mat-toolbar,
+.mat-mdc-select,
+.mat-mdc-option,
+.mat-mdc-tab,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+label,
+td,
+th {
+  font-family: var(--font) !important;
+}
+
+.material-icons,
+mat-icon {
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--surface);
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  --mdc-filled-button-container-color: var(--accent);
+  --mdc-filled-button-label-text-color: #fff;
+  --mdc-protected-button-container-color: var(--accent);
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+button.mat-mdc-button,
+a.mat-mdc-button {
+  font-weight: 600;
+}
+
+.mat-mdc-table {
+  background: transparent;
+}
+
+.mat-mdc-header-row {
+  background: var(--lavender-soft);
+}
+
+.mat-mdc-row:hover {
+  background: rgba(59, 111, 212, 0.04);
 }
