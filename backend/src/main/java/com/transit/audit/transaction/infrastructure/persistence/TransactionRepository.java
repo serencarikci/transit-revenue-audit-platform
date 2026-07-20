@@ -26,8 +26,6 @@ public interface TransactionRepository
 	List<CardTransaction> findEpochDatedTransactions(@Param("epochStart") Instant epochStart,
 			@Param("epochEnd") Instant epochEnd);
 
-	List<CardTransaction> findByTerminalIdAndTransactionTimeBetween(Long terminalId, Instant from, Instant to);
-
 	@Query("""
 			select t from CardTransaction t
 			where t.transactionTime >= :fromTime and t.transactionTime <= :toTime

@@ -99,11 +99,6 @@ export class ReconciliationApi {
     return this.http.post<ReconciliationResult>(`${base}/reconciliation/periods/${id}/calculate`, {});
   }
 
-  /** @deprecated use calculate */
-  run(id: number): Observable<ReconciliationResult> {
-    return this.calculate(id);
-  }
-
   results(q?: {
     year?: number;
     month?: number;

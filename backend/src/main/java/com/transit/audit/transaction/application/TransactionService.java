@@ -6,8 +6,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,8 +22,6 @@ import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class TransactionService {
-
-	private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
 
 	public static final Instant EPOCH_DAY_START = Instant.parse("1970-01-01T00:00:00Z");
 	public static final Instant EPOCH_DAY_END = Instant.parse("1970-01-02T00:00:00Z");
@@ -65,13 +61,6 @@ public class TransactionService {
 		CardTransaction tx = transactionRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("CardTransaction", id));
 		return transactionMapper.toResponse(tx);
-	}
-
-	@Transactional(readOnly = true)
-	public List<TransactionResponse> findEpochDatedTransactions() {
-		List<CardTransaction> found = transactionRepository.findEpochDatedTransactions(EPOCH_DAY_START, EPOCH_DAY_END);
-		log.info("Rule 3 scan found {} epoch-dated transaction(s)", found.size());
-		return found.stream().map(transactionMapper::toResponse).toList();
 	}
 
 	static boolean isEpochDated(Instant transactionTime) {

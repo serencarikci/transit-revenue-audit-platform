@@ -1,7 +1,6 @@
 package com.transit.audit.transaction.web;
 
 import java.time.Instant;
-import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
@@ -51,12 +50,6 @@ public class TransactionController {
 	@PreAuthorize("isAuthenticated()")
 	public TransactionResponse get(@PathVariable Long id) {
 		return transactionService.get(id);
-	}
-
-	@GetMapping("/epoch-dated")
-	@PreAuthorize("hasAnyRole('ADMIN','FINANCE_USER','AUDITOR')")
-	public List<TransactionResponse> epochDated() {
-		return transactionService.findEpochDatedTransactions();
 	}
 
 	@PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

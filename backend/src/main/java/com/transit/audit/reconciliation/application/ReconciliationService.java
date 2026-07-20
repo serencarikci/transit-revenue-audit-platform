@@ -5,9 +5,6 @@ import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +25,6 @@ import com.transit.audit.reconciliation.web.request.CreateFinancialPeriodRequest
 import com.transit.audit.reconciliation.web.request.ResolveReconciliationRequest;
 import com.transit.audit.reconciliation.web.response.FinancialPeriodResponse;
 import com.transit.audit.reconciliation.web.response.ReconciliationResultResponse;
-import com.transit.audit.reconciliation.web.response.UnassignedTransactionResponse;
 import com.transit.audit.terminal.application.TerminalService;
 import com.transit.audit.transaction.domain.model.CardTransaction;
 import com.transit.audit.transaction.domain.model.TransactionType;
@@ -120,18 +116,6 @@ public class ReconciliationService {
 		}
 		result.resolve(actor, request.resolutionNote());
 		return toResultResponse(reconciliationResultRepository.save(result));
-	}
-
-	@Transactional(readOnly = true)
-	public List<UnassignedTransactionResponse> findTransactionsWithoutDepotAssignment(Instant from, Instant to) {
-		List<UnassignedTransactionResponse> unmatched = new ArrayList<>();
-		for (CardTransaction tx : transactionRepository.findByTransactionTimeBetween(from, to)) {
-			if (terminalService.findDepotForTerminalAt(tx.getTerminalId(), tx.getTransactionTime()).isEmpty()) {
-				unmatched.add(new UnassignedTransactionResponse(tx.getId(), tx.getTerminalId(),
-						tx.getTransactionReference(), tx.getTransactionTime().toString()));
-			}
-		}
-		return unmatched;
 	}
 
 	private PeriodTotals computeTotalsForDepotDay(Long depotId, LocalDate periodDate) {
