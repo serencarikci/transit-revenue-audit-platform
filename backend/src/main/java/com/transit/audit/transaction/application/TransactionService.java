@@ -1,0 +1,62 @@
+package com.transit.audit.transaction.application;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.transit.audit.common.exception.ResourceNotFoundException;
+import com.transit.audit.transaction.domain.model.CardTransaction;
+import com.transit.audit.transaction.domain.model.TransactionType;
+import com.transit.audit.transaction.infrastructure.persistence.TransactionRepository;
+import com.transit.audit.transaction.web.response.TransactionResponse;
+
+@Service
+public class TransactionService {
+
+	private static final Logger log = LoggerFactory.getLogger(TransactionService.class);
+
+	public static final Instant EPOCH_DAY_START = Instant.parse("1970-01-01T00:00:00Z");
+	public static final Instant EPOCH_DAY_END = Instant.parse("1970-01-02T00:00:00Z");
+
+	private final TransactionRepository transactionRepository;
+	private final TransactionMapper transactionMapper;
+
+	public TransactionService(TransactionRepository transactionRepository, TransactionMapper transactionMapper) {
+		this.transactionRepository = transactionRepository;
+		this.transactionMapper = transactionMapper;
+	}
+
+	@Transactional(readOnly = true)
+	public Page<TransactionResponse> search(Long terminalId, TransactionType type, Instant from, Instant to,
+			Pageable pageable) {
+		return transactionRepository.search(terminalId, type, from, to, pageable).map(transactionMapper::toResponse);
+	}
+
+	@Transactional(readOnly = true)
+	public TransactionResponse get(Long id) {
+		CardTransaction tx = transactionRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("CardTransaction", id));
+		return transactionMapper.toResponse(tx);
+	}
+
+
+	@Transactional(readOnly = true)
+	public List<TransactionResponse> findEpochDatedTransactions() {
+		List<CardTransaction> found = transactionRepository.findEpochDatedTransactions(EPOCH_DAY_START, EPOCH_DAY_END);
+		log.info("Rule 3 scan found {} epoch-dated transaction(s)", found.size());
+		return found.stream().map(transactionMapper::toResponse).toList();
+	}
+
+	static boolean isEpochDated(Instant transactionTime) {
+		LocalDate date = transactionTime.atZone(ZoneOffset.UTC).toLocalDate();
+		return LocalDate.of(1970, 1, 1).equals(date);
+	}
+}

@@ -1,0 +1,21 @@
+<div class="login-page">
+  <mat-card class="panel">
+    <h1>Login</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" autocomplete="username" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" autocomplete="current-password" />
+      </mat-form-field>
+      @if (error()) {
+        <p class="err">{{ error() }}</p>
+      }
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Please wait...' : 'Login' }}
+      </button>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,57 @@
+<section>
+  <h1>Depots</h1>
+  @if (message()) { <p class="msg">{{ message() }}</p> }
+  <div class="grid">
+    <mat-card class="card">
+      <h2>New depot</h2>
+      <form [formGroup]="depotForm" (ngSubmit)="createDepot()">
+        <mat-form-field appearance="outline" class="full"><mat-label>Code</mat-label><input matInput formControlName="code" /></mat-form-field>
+        <mat-form-field appearance="outline" class="full"><mat-label>Name</mat-label><input matInput formControlName="name" /></mat-form-field>
+        <button mat-flat-button color="primary" type="submit">New depot</button>
+      </form>
+    </mat-card>
+    <mat-card class="card">
+      <h2>New terminal</h2>
+      <form [formGroup]="terminalForm" (ngSubmit)="createTerminal()">
+        <mat-form-field appearance="outline" class="full"><mat-label>Terminal number</mat-label><input matInput formControlName="terminalNumber" /></mat-form-field>
+        <mat-form-field appearance="outline" class="full"><mat-label>Serial</mat-label><input matInput formControlName="serialNumber" /></mat-form-field>
+        <button mat-flat-button color="primary" type="submit">New terminal</button>
+      </form>
+    </mat-card>
+    <mat-card class="card">
+      <h2>New assignment</h2>
+      <form [formGroup]="assignmentForm" (ngSubmit)="createAssignment()">
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Terminal</mat-label>
+          <mat-select formControlName="terminalId" (selectionChange)="loadAssignments($event.value)">
+            @for (t of terminals(); track t.id) {
+              <mat-option [value]="t.id">{{ t.terminalNumber }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Depot</mat-label>
+          <mat-select formControlName="depotId">
+            @for (d of depots(); track d.id) {
+              <mat-option [value]="d.id">{{ d.code }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full"><mat-label>Valid from</mat-label><input matInput type="date" formControlName="validFrom" /></mat-form-field>
+        <button mat-flat-button color="primary" type="submit">Save assignment</button>
+      </form>
+    </mat-card>
+  </div>
+  <mat-card class="card">
+    <h2>Assignments</h2>
+    <table mat-table [dataSource]="assignments()" class="full">
+      <ng-container matColumnDef="id"><th mat-header-cell *matHeaderCellDef>ID</th><td mat-cell *matCellDef="let a">{{ a.id }}</td></ng-container>
+      <ng-container matColumnDef="terminal"><th mat-header-cell *matHeaderCellDef>Terminal</th><td mat-cell *matCellDef="let a">{{ a.terminalId }}</td></ng-container>
+      <ng-container matColumnDef="depot"><th mat-header-cell *matHeaderCellDef>Depot</th><td mat-cell *matCellDef="let a">{{ a.depotId }}</td></ng-container>
+      <ng-container matColumnDef="from"><th mat-header-cell *matHeaderCellDef>From</th><td mat-cell *matCellDef="let a">{{ a.validFrom }}</td></ng-container>
+      <ng-container matColumnDef="to"><th mat-header-cell *matHeaderCellDef>To</th><td mat-cell *matCellDef="let a">{{ a.validTo || 'open' }}</td></ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+  </mat-card>
+</section>

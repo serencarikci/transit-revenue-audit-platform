@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: transit-revenue-audit-platform
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:transit_audit}
+    username: ${DB_USER:transit}
+    password: ${DB_PASSWORD:transit}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    sql-migration-prefix: v
+    sql-migration-separator: "__"
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:change-me-to-a-very-long-secret-key-for-hs256-signing-32b+}
+      access-token-minutes: ${JWT_ACCESS_MINUTES:30}
+  reconciliation:
+    small-variance-threshold: 1.00
+  anomaly:
+    future-date-tolerance-minutes: 5
+    cancel-sale-proximity-seconds: 5
+    frequent-transfer-max-count: 5
+    frequent-transfer-window-hours: 24
+    max-open-shift-hours: 12
+    scan-cron: "0 10 1 * * *"
+  pda:
+    sync-delay-hours: 24
+    planned-shutdown-hour: 1
+    scan-cron: "0 5 1 * * *"
+  reporting:
+    output-dir: ${REPORT_OUTPUT_DIR:./data/reports}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    root: INFO
+    com.transit.audit: INFO

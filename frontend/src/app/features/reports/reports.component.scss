@@ -1,0 +1,10 @@
+h1 { font-size: 1.15rem; font-weight: 500; margin: 0 0 0.75rem; }
+.card { padding: 1rem; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 0.75rem; align-items: start; }
+.status { margin-top: 1rem; display: grid; gap: 0.75rem; max-width: 480px; }
+.chip { display: inline-block; padding: 0.2rem 0.6rem; background: #e0e0e0; font-weight: 500; width: fit-content; }
+.chip.running { background: #fff3cd; }
+.chip.ok { background: #d4edda; }
+.chip.fail { background: #f8d7da; }
+.err { color: #b00020; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,33 @@
+<section>
+  <h1>Reports</h1>
+  <mat-card class="card">
+    <form [formGroup]="form" (ngSubmit)="start()" class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Report type</mat-label>
+        <mat-select formControlName="reportType">
+          <mat-option value="DEPOT_DAY">DEPOT_DAY</mat-option>
+          <mat-option value="TRANSACTION_EXPORT">TRANSACTION_EXPORT</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>From</mat-label><input matInput type="datetime-local" formControlName="from" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>To</mat-label><input matInput type="datetime-local" formControlName="to" /></mat-form-field>
+      <button mat-flat-button color="primary" type="submit" [disabled]="isRunning()">Start</button>
+    </form>
+    @if (error()) { <p class="err">{{ error() }}</p> }
+    @if (job(); as j) {
+      <div class="status">
+        <p>Job #{{ j.id }}</p>
+        <span class="chip" [class.running]="isRunning()" [class.ok]="j.status === 'COMPLETED'" [class.fail]="j.status === 'FAILED'">{{ j.status }}</span>
+        @if (isRunning()) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        @if (j.status === 'FAILED') {
+          <p class="err">{{ j.errorMessage }}</p>
+        }
+        @if (j.status === 'COMPLETED') {
+          <button mat-stroked-button color="primary" type="button" (click)="download()">Download</button>
+        }
+      </div>
+    }
+  </mat-card>
+</section>

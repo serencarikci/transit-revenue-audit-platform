@@ -1,0 +1,19 @@
+<section>
+  <h1>Dashboard</h1>
+  <div class="kpis">
+    <mat-card><h3>Open variances</h3><p>{{ openVariances }}</p></mat-card>
+    <mat-card><h3>Open anomalies</h3><p>{{ openAnomalies }}</p></mat-card>
+    <mat-card><h3>Active terminals</h3><p>{{ activeTerminals }}</p></mat-card>
+    <mat-card><h3>Stale sync (>24h)</h3><p>{{ staleTerminals }}</p></mat-card>
+  </div>
+  <div class="charts">
+    <mat-card>
+      <h3>Variances</h3>
+      <canvas #varianceChart height="140"></canvas>
+    </mat-card>
+    <mat-card>
+      <h3>Anomaly severity</h3>
+      <canvas #anomalyChart height="140"></canvas>
+    </mat-card>
+  </div>
+</section>

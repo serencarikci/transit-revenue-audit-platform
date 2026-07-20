@@ -1,0 +1,30 @@
+<section>
+  <h1>Transactions</h1>
+  <mat-card class="card">
+    <form [formGroup]="form" (ngSubmit)="search()" class="filters">
+      <mat-form-field appearance="outline"><mat-label>Terminal ID</mat-label><input matInput formControlName="terminalId" /></mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="">Any</mat-option>
+          <mat-option value="SALE">SALE</mat-option>
+          <mat-option value="CANCELLATION">CANCELLATION</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>From</mat-label><input matInput type="datetime-local" formControlName="from" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>To</mat-label><input matInput type="datetime-local" formControlName="to" /></mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Search</button>
+    </form>
+    <table mat-table [dataSource]="rows()" class="full">
+      <ng-container matColumnDef="id"><th mat-header-cell *matHeaderCellDef>ID</th><td mat-cell *matCellDef="let t">{{ t.id }}</td></ng-container>
+      <ng-container matColumnDef="ref"><th mat-header-cell *matHeaderCellDef>Ref</th><td mat-cell *matCellDef="let t">{{ t.transactionReference }}</td></ng-container>
+      <ng-container matColumnDef="terminal"><th mat-header-cell *matHeaderCellDef>Terminal</th><td mat-cell *matCellDef="let t">{{ t.terminalId }}</td></ng-container>
+      <ng-container matColumnDef="type"><th mat-header-cell *matHeaderCellDef>Type</th><td mat-cell *matCellDef="let t">{{ t.transactionType }}</td></ng-container>
+      <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef>Amount</th><td mat-cell *matCellDef="let t">{{ t.amount }}</td></ng-container>
+      <ng-container matColumnDef="time"><th mat-header-cell *matHeaderCellDef>Time</th><td mat-cell *matCellDef="let t">{{ t.transactionTime }}</td></ng-container>
+      <ng-container matColumnDef="card"><th mat-header-cell *matHeaderCellDef>Card</th><td mat-cell *matCellDef="let t">{{ t.cardAlias }}</td></ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+  </mat-card>
+</section>

@@ -1,0 +1,14 @@
+h1 { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 500; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+.kpis mat-card { padding: 0.75rem 1rem; }
+.kpis h3 { margin: 0; font-size: 0.8rem; color: #666; font-weight: 400; }
+.kpis p { margin: 0.25rem 0 0; font-size: 1.5rem; font-weight: 500; }
+.charts { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 0.75rem; }
+.charts mat-card { padding: 0.75rem 1rem; }
+.charts h3 { margin: 0 0 0.5rem; font-size: 0.95rem; font-weight: 500; }
+@media (max-width: 1000px) {
+  .kpis, .charts { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .kpis, .charts { grid-template-columns: 1fr; }
+}

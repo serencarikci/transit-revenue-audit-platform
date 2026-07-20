@@ -1,0 +1,49 @@
+<section>
+  <h1>Anomalies</h1>
+  <mat-card class="card">
+    <form [formGroup]="filters" (ngSubmit)="reload()" class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Severity</mat-label>
+        <mat-select formControlName="severity">
+          <mat-option value="">Any</mat-option>
+          <mat-option value="HIGH">HIGH</mat-option>
+          <mat-option value="MEDIUM">MEDIUM</mat-option>
+          <mat-option value="LOW">LOW</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="">Any</mat-option>
+          <mat-option value="OPEN">OPEN</mat-option>
+          <mat-option value="UNDER_REVIEW">UNDER_REVIEW</mat-option>
+          <mat-option value="RESOLVED">RESOLVED</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Filter</button>
+    </form>
+    <table mat-table [dataSource]="rows()" class="full">
+      <ng-container matColumnDef="id"><th mat-header-cell *matHeaderCellDef>ID</th><td mat-cell *matCellDef="let a">{{ a.id }}</td></ng-container>
+      <ng-container matColumnDef="rule"><th mat-header-cell *matHeaderCellDef>Rule</th><td mat-cell *matCellDef="let a">{{ a.ruleCode }}</td></ng-container>
+      <ng-container matColumnDef="severity"><th mat-header-cell *matHeaderCellDef>Severity</th><td mat-cell *matCellDef="let a">{{ a.severity }}</td></ng-container>
+      <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Status</th><td mat-cell *matCellDef="let a">{{ a.status }}</td></ng-container>
+      <ng-container matColumnDef="title"><th mat-header-cell *matHeaderCellDef>Title</th><td mat-cell *matCellDef="let a">{{ a.title }}</td></ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let a">
+          <button mat-button type="button" (click)="review(a)">Review</button>
+          <button mat-button type="button" (click)="prepareResolve(a)">Resolve</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+    <form [formGroup]="resolveForm" (ngSubmit)="resolve()" class="resolve">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Resolution note (selected anomaly {{ resolveForm.value.id }})</mat-label>
+        <input matInput formControlName="resolutionNote" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Resolve</button>
+    </form>
+  </mat-card>
+</section>

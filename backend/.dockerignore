@@ -1,0 +1,6 @@
+target
+Release
+.git
+*.md
+.idea
+.vscode

@@ -1,0 +1,55 @@
+<section>
+  <h1>Reconciliation</h1>
+  <mat-card class="form-card">
+    <h2>New period</h2>
+    <form [formGroup]="form" (ngSubmit)="createAndRun()" class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Depot</mat-label>
+        <mat-select formControlName="depotId">
+          @for (d of depots(); track d.id) {
+            <mat-option [value]="d.id">{{ d.code }} — {{ d.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Period date</mat-label>
+        <input matInput type="date" formControlName="periodDate" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Opening balance</mat-label>
+        <input matInput type="number" step="0.01" formControlName="openingBalance" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Deposited</mat-label>
+        <input matInput type="number" step="0.01" formControlName="depositedAmount" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Withdrawal</mat-label>
+        <input matInput type="number" step="0.01" formControlName="withdrawalAmount" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Actual closing</mat-label>
+        <input matInput type="number" step="0.01" formControlName="actualClosingBalance" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Save and run</button>
+    </form>
+    @if (message()) { <p class="msg">{{ message() }}</p> }
+  </mat-card>
+
+  <mat-card class="table-card">
+    <h2>Results</h2>
+    <table mat-table [dataSource]="results()" class="full">
+      <ng-container matColumnDef="id"><th mat-header-cell *matHeaderCellDef>ID</th><td mat-cell *matCellDef="let r">{{ r.id }}</td></ng-container>
+      <ng-container matColumnDef="period"><th mat-header-cell *matHeaderCellDef>Period</th><td mat-cell *matCellDef="let r">{{ r.financialPeriodId }}</td></ng-container>
+      <ng-container matColumnDef="variance"><th mat-header-cell *matHeaderCellDef>Variance</th><td mat-cell *matCellDef="let r">{{ r.variance }}</td></ng-container>
+      <ng-container matColumnDef="net"><th mat-header-cell *matHeaderCellDef>Net</th><td mat-cell *matCellDef="let r">{{ r.netAmount }}</td></ng-container>
+      <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef>Status</th><td mat-cell *matCellDef="let r">{{ r.status }}</td></ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let r"><a mat-button [routerLink]="['/variances', r.id]">Detail</a></td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+  </mat-card>
+</section>

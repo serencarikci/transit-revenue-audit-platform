@@ -1,0 +1,23 @@
+<section>
+  <h1>Variance</h1>
+  @if (result(); as r) {
+    <mat-card class="card">
+      <p>ID {{ r.id }} · Period {{ r.financialPeriodId }} · Status {{ r.status }}</p>
+      <canvas #chart height="120"></canvas>
+      @if (r.status !== 'RESOLVED') {
+        <form [formGroup]="form" (ngSubmit)="resolve()" class="resolve">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Resolution note</mat-label>
+            <textarea matInput rows="3" formControlName="resolutionNote"></textarea>
+          </mat-form-field>
+          <button mat-flat-button color="primary" type="submit">Resolve</button>
+        </form>
+      } @else {
+        <p>Resolved by {{ r.resolvedBy }} — {{ r.resolutionNote }}</p>
+      }
+      @if (message()) { <p>{{ message() }}</p> }
+    </mat-card>
+  } @else {
+    <p>Loading…</p>
+  }
+</section>
